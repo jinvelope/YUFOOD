@@ -1,0 +1,53 @@
+/* NavBar.css */
+.navbar {
+    width: 100%;
+    background-color: #f0f0f0;  /* 회색 배경으로 변경 */
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;  /* 왼쪽 정렬로 변경 */
+    align-items: center;
+    height: 60px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    margin-left: 20px;  /* 왼쪽 여백 추가 */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #d4d4d4;  /* 호버 색상 밝게 조정 */
+    color: #000000;
+}
+
+.nav-links a.active {
+    color: #26baa4;
+    font-weight: 600;
+    position: relative;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #26baa4;
+}

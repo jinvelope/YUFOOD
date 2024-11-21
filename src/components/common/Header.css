@@ -1,0 +1,111 @@
+/* Header.css */
+.header {
+    background-color: #ffffff;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.logo-link:hover {
+    transform: translateY(-1px);
+}
+
+.logo-icon {
+    width: 100px;  /* 원하는 크기로 조절 */
+    height: 40px;  /* 원하는 크기로 조절 */
+    margin-right: 15px;  /* 로고 텍스트와의 간격 */
+    vertical-align: middle;  /* 텍스트와 수직 정렬 */
+}
+.logo-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: -0.5px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 10px 40px 10px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    width: 240px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #f8f8f8;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #26baa4;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(38, 186, 164, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.search-icon:hover {
+    color: #26baa4;
+}
+
+.login-button,
+button[aria-label="Toggle theme"] {
+    height: 36px;
+    width: 105px;  /* 정확한 너비 지정 */
+    padding: 0 12px;
+    background-color: #26baa4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    gap: 4px;  /* 아이콘과 텍스트 사이 간격 */
+}
+
+/* hover 효과 */
+.login-button:hover,
+button[aria-label="Toggle theme"]:hover {
+    background-color: #229e8a;
+    opacity: 0.9;
+}
+
+/* 아이콘 크기 조정 */
+button[aria-label="Toggle theme"] svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* 버튼 사이 간격 */
+.login-button {
+    margin-left: 8px;
+}
