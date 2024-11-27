@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.ResourceNotFoundException;
 import com.example.demo.entity.Review;
@@ -21,15 +23,31 @@ import com.example.demo.service.*;
 
 @RestController
 @RequestMapping("/api/review_info")
-@CrossOrigin(origins = "http://localhost:3000") // React 앱의 주소
+@CrossOrigin(origins = "http://localhost:3000")
 public class ReviewController {
-    
     @Autowired
     private ReviewService reviewService;
+    
+    @Autowired
+    private StorageService storageService;
 
-    // 리뷰 생성
     @PostMapping
-    public ResponseEntity<Review> createReview(@RequestBody Review review) {
+    public ResponseEntity<Review> createReview(
+            @RequestParam("reviewstar") Integer reviewstar,
+            @RequestParam("content") String content,
+            @RequestParam("rid") Integer rid,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        
+        Review review = new Review();
+        review.setReviewstar(reviewstar);
+        review.setContent(content);
+        review.setRid(rid);
+        
+        if (image != null && !image.isEmpty()) {
+            String filename = storageService.store(image);
+            review.setImageUrl(filename);
+        }
+        
         Review savedReview = reviewService.saveReview(review);
         return new ResponseEntity<>(savedReview, HttpStatus.CREATED);
     }

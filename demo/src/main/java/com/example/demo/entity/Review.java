@@ -10,7 +10,10 @@ public class Review {
     private Integer reviewstar;
     private String content;
     private Integer userid;
-
+    
+    @Column(name = "imageUrl")
+    private String imageUrl;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rid")
     private Restaurant restaurant;
@@ -71,5 +74,12 @@ public class Review {
 
     public Restaurant getRestaurant() {
         return this.restaurant;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
