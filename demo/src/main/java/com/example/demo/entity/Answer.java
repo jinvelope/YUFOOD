@@ -23,7 +23,7 @@ public class Answer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User author;
+    private User user;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -68,12 +68,12 @@ public class Answer {
     }
 
     // Getter and Setter for author
-    public User getAuthor() {
-        return author;
+    public User getUser() {
+        return user;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     // Getter and Setter for createdAt

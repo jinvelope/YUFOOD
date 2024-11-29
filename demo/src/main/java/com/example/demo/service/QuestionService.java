@@ -46,7 +46,7 @@ public class QuestionService {
         List<Sort.Order> sortOrders = new ArrayList<>();
         sortOrders.add(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sortOrders));
-        return questionRepository.findByAuthor(author, pageable);
+        return questionRepository.findByUser(author, pageable);
     }
 
     public Question getQuestionById(Long id){
@@ -61,7 +61,7 @@ public class QuestionService {
         Question question = new Question();
         question.setTitle(title);
         question.setContent(content);
-        question.setAuthor(user);
+        question.setUser(user);
         question.setCreatedAt(LocalDateTime.now());
         questionRepository.save(question);
     }

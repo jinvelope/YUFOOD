@@ -50,7 +50,7 @@ public class AnswerService {
         Answer answer = new Answer();
         answer.setQuestion(question);
         answer.setContent(content);
-        answer.setAuthor(author);
+        answer.setUser(author);
         answer.setCreatedAt(LocalDateTime.now());
         answerRepository.save(answer);
         return answer;

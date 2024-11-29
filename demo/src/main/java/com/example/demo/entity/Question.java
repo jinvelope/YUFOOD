@@ -3,42 +3,47 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 public class Question {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 자동 생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255) // 제목 필드 제약 조건 추가
+    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT") // 내용 필드 제약 조건 추가
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Answer> answers;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // 외래 키 매핑
-    private User author;
+    @JoinColumn(name = "user_id", nullable = false) // user_id 필수
+    private User user;
 
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
+    @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    private int views;
+    // Getters and Setters
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public int getViews() {
+    	return views;
     }
-
-    // Getter and Setter for id
+    
+    public void setViews(int views) {
+    	this.views = views;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -47,7 +52,6 @@ public class Question {
         this.id = id;
     }
 
-    // Getter and Setter for title
     public String getTitle() {
         return title;
     }
@@ -56,7 +60,6 @@ public class Question {
         this.title = title;
     }
 
-    // Getter and Setter for content
     public String getContent() {
         return content;
     }
@@ -65,25 +68,14 @@ public class Question {
         this.content = content;
     }
 
-    // Getter and Setter for answers
-    public List<Answer> getAnswers() {
-        return answers;
+    public User getUser() {
+        return user;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    // Getter and Setter for author
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    // Getter and Setter for createdAt
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -92,7 +84,6 @@ public class Question {
         this.createdAt = createdAt;
     }
 
-    // Getter and Setter for updatedAt
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }

@@ -15,15 +15,15 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     Question findByTitle(String title);
     Question findByTitleAndContent(String title, String content);
     List<Question> findByTitleLike(String title);
-    Page<Question> findByAuthor(User author, Pageable pageable);
+    Page<Question> findByUser(User author, Pageable pageable);
     Page<Question> findAll(Pageable pageable);
     Page<Question> findAll(Specification<Question> spec, Pageable pageable);
     @Query("SELECT "
             + "distinct q "
             + "from Question q "
-            + "left outer join User u1 on q.author = u1 "
+            + "left outer join User u1 on q.user = u1 "
             + "left outer join Answer a on a.question = q "
-            + "left outer join User u2 on a.author = u2 "
+            + "left outer join User u2 on a.user = u2 "
             + "where "
             + "   q.title like %:keyword% "
             + "   or q.content like %:keyword% "

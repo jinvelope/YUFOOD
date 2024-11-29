@@ -16,30 +16,44 @@ public class JwtUtil {
     private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 86400000; // 1일
 
-    public String generateToken(String username) {
+
+    // Access Token 생성
+    public String generateAccessToken(String email) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1일 유효
-                .signWith(SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+    }
+
+    // 토큰에서 이메일 추출
+    public String extractEmail(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
  // JWT 토큰 검증 및 사용자 이름 추출
     public String validateTokenAndGetUsername(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY) // 서명 키 설정
+                    .setSigningKey(SECRET_KEY)
                     .build()
-                    .parseClaimsJws(token) // 토큰 파싱 및 검증
-                    .getBody(); // 클레임 정보 가져오기
-
-            // 토큰의 subject(사용자 이름) 반환
+                    .parseClaimsJws(token)
+                    .getBody();
+            
+            Date expiration = claims.getExpiration();
+            if (expiration != null && expiration.before(new Date())) {
+                return null;
+            }
+            if (claims.getExpiration().before(new Date())) {
+                return null;
+            }
             return claims.getSubject();
         } catch (Exception e) {
-            // 토큰 검증 실패 시 null 반환
-            System.err.println("JWT 검증 실패: " + e.getMessage());
             return null;
         }
-    }
-}
+    }}

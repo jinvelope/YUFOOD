@@ -1,109 +1,99 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AnswerForm;
-import com.example.demo.dto.QuestionForm;
-import com.example.demo.entity.Answer;
+import com.example.demo.dto.QuestionResponse;
 import com.example.demo.entity.Question;
 import com.example.demo.entity.User;
 import com.example.demo.repository.QuestionRepository;
-import com.example.demo.service.AnswerService;
-import com.example.demo.service.JoinService;
-import com.example.demo.service.QuestionService;
-import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
+import com.example.demo.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@RequestMapping("/question")
-@Controller
+@RestController
+@RequestMapping("/api/questions")
 public class QuestionController {
-    private final QuestionService questionService;
-    private final AnswerService answerService;
-    private final JoinService joinService;
 
-    public QuestionController(QuestionService questionService, JoinService joinService, AnswerService answerService) {
-        this.questionService = questionService;
-        this.joinService = joinService;
-        this.answerService = answerService;
+    private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public QuestionController(QuestionRepository questionRepository, UserRepository userRepository) {
+        this.questionRepository = questionRepository;
+        this.userRepository = userRepository;
     }
 
-    @GetMapping("/list")
-    public String QuestionList(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam(value="keyword", defaultValue="") String keyword){
-        Page<Question> paging = questionService.getAllQuestions(page, keyword);
-        model.addAttribute("paging", paging);
-        model.addAttribute("keyword", keyword);
-        return "question_list";
+    // 모든 질문 조회 (QnA 메인페이지)
+//    @GetMapping
+//    public ResponseEntity<?> getAllQuestions() {
+//        List<Question> questions = questionRepository.findAll();
+//        // 질문 목록을 JSON 형태로 반환
+//        List<QuestionResponse> response = questions.stream()
+//                .map(q -> new QuestionResponse(
+//                        q.getId(),
+//                        q.getTitle(),
+//                        q.getAuthor().getUsername(),
+//                        q.getCreatedAt(),
+//                        q.getViews()))
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(response);
+//    }
+
+    // 특정 질문 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getQuestionById(@PathVariable Long id) {
+        return questionRepository.findById(id)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("질문을 찾을 수 없습니다."));
     }
 
-    @GetMapping(value ="/detail/{id}")
-    public String QuestionDetail(Model model, @PathVariable("id") Long id, AnswerForm answerForm,
-                                 @RequestParam(value="ans-page", defaultValue="0") int answerPage) {
-        Question question = questionService.getQuestionById(id);
-        Page<Answer> answerPaging = answerService.getAllAnswers(question, answerPage);
-        model.addAttribute("question", question);
-        model.addAttribute("answerPaging", answerPaging);
-        return "question_detail";
-    }
-
-    @GetMapping("/new")
-    @PreAuthorize("isAuthenticated()")
-    public String createQuestion(QuestionForm questionForm) {
-        return "question_form";
-    }
-
-    @PostMapping("/new")
-    @PreAuthorize("isAuthenticated()")
-    public String createQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
-        if (bindingResult.hasErrors())
-            return "question_form";
-        User user = joinService.getUser(principal.getName());
-        questionService.create(questionForm.getTitle(), questionForm.getContent(), user);
-        return "redirect:/question/list";
-    }
-
-    @GetMapping("/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String editQuestion(QuestionForm questionForm, @PathVariable("id") Long id, Principal principal) {
-        Question question = questionService.getQuestionById(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"본인이 작성한 글만 수정할 수 있습니다.");
+    // 질문 등록
+    @PostMapping
+    public ResponseEntity<?> createQuestion(@RequestBody QuestionResponse questionRequest, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자입니다.");
         }
-        questionForm.setTitle(question.getTitle());
-        questionForm.setContent(question.getContent());
-        return "question_form";
+
+        try {
+            // 사용자 확인
+            String email = authentication.getName(); // JWT에서 이메일 추출
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+            // 질문 생성
+            Question question = new Question();
+            question.setTitle(questionRequest.getTitle());
+            question.setContent(questionRequest.getContent());
+            question.setUser(user);
+            question.setCreatedAt(LocalDateTime.now());
+            question.setUpdatedAt(LocalDateTime.now());
+
+            questionRepository.save(question);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("질문이 성공적으로 등록되었습니다.");
+        } catch (Exception e) {
+        	System.out.println("error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("질문 등록 중 오류가 발생했습니다.");
+        }
     }
 
-    @PostMapping("/edit/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String editQuestion(@Valid QuestionForm questionForm, BindingResult bindingResult,
-                               Principal principal, @PathVariable("id") Long id) {
-        if (bindingResult.hasErrors())
-            return "question_form";
-        Question question = questionService.getQuestionById(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
-            throw new SecurityException("본인이 작성한 글만 수정할 수 있습니다.");
-        }
-        questionService.edit(question, questionForm.getTitle(), questionForm.getContent());
-        return String.format("redirect:/question/detail/%s", id);
-    }
 
-    @GetMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String deleteQuestion(@PathVariable Long id, Principal principal) {
-        Question question = questionService.getQuestionById(id);
-        if (!question.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"본인이 작성한 글만 삭제할 수 있습니다.");
-        }
-        questionService.delete(question);
-        return "redirect:/question_list";
+    // 질문 조회수 증가
+    @PutMapping("/{id}/view")
+    public ResponseEntity<?> incrementViews(@PathVariable Long id) {
+        return questionRepository.findById(id)
+                .map(question -> {
+                    question.setViews(question.getViews() + 1);
+                    questionRepository.save(question);
+                    return ResponseEntity.ok("조회수가 증가되었습니다.");
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("질문을 찾을 수 없습니다."));
     }
 }

@@ -9,44 +9,49 @@ public class Review {
     private Integer reviewid;
     private Integer reviewstar;
     private String content;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
+    
+    @Column(name = "userid", insertable = false, updatable = false)
     private Integer userid;
     
-    @Column(name = "imageUrl")
-    private String imageUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private User user;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rid")
     private Restaurant restaurant;
     
-    // 기본 생성자 추가
+    // 기본 생성자
     public Review() {
-        this.userid = 0;
         this.reviewstar = 0;
         this.content = "";
+    }
+    
+    public Integer getReviewid() {
+        return reviewid;
     }
     
     public void setReviewid(Integer reviewid) {
         this.reviewid = reviewid;
     }
     
-    public Integer getReviewid() { // int에서 Integer로 변경
-        return reviewid;
+    public Integer getReviewstar() {
+        return reviewstar != null ? reviewstar : 0;
     }
     
     public void setReviewstar(Integer reviewstar) {
         this.reviewstar = reviewstar != null ? reviewstar : 0;
     }
     
-    public Integer getReviewstar() { // int에서 Integer로 변경
-        return reviewstar != null ? reviewstar : 0;
+    public String getContent() {
+        return content != null ? content : "";
     }
     
     public void setContent(String content) {
         this.content = content != null ? content : "";
-    }
-    
-    public String getContent() {
-        return content != null ? content : "";
     }
     
     public void setRid(Integer rid) {
@@ -60,12 +65,12 @@ public class Review {
         return this.restaurant != null ? this.restaurant.getRid() : null;
     }
     
-    public void setUserid(Integer userid) {
-        this.userid = userid != null ? userid : 0;
+    public Integer getUserid() {
+        return user != null ? user.getId() : userid;
     }
     
-    public Integer getUserid() {
-        return userid != null ? userid : 0;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     public void setRestaurant(Restaurant restaurant) {
@@ -79,7 +84,16 @@ public class Review {
     public String getImageUrl() {
         return imageUrl;
     }
+    
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    
+    public User getUser() {
+        return user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
     }
 }
