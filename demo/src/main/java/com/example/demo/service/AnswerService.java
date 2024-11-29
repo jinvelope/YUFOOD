@@ -39,7 +39,7 @@ public class AnswerService {
         List<Sort.Order> sortOrders = new ArrayList<>();
         sortOrders.add(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sortOrders));
-        return answerRepository.findByAuthor(author, pageable);
+        return answerRepository.findByUser(author, pageable);
     }
 
     // 댓글 작성

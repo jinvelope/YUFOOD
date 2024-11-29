@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +55,27 @@ public class RestaurantController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    @GetMapping("/paged/category/{category}/location/{location}")
+    public ResponseEntity<?> getRestaurants(
+            @PathVariable("category") String category,
+            @PathVariable("location") String location,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        try {
+            Page<Restaurant> restaurants = restaurantService.getRestaurantsByCategoryAndLocation(category, location, page, size);
+            return ResponseEntity.ok(restaurants);
+        } catch (Exception e) {
+            // 로그 출력
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred: " + e.getMessage());
+        }
+    }
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<Restaurant>> searchRestaurants(@RequestParam("query") String query) {
+        List<Restaurant> results = restaurantService.searchRestaurants(query); // 검색 로직은 service에서 처리
+        return ResponseEntity.ok(results);
     }
 }

@@ -5,8 +5,7 @@ import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import '../styles/QnA.css';  // QnA 스타일 재사용
 import './FindId.css';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";  // FindId 스타일 재사용
+
 
 const FindPasswordPage = () => {
     const [email, setEmail] = useState('');
@@ -39,8 +38,6 @@ const FindPasswordPage = () => {
 
     return (
         <div>
-            <Header/>
-            <NavBar/>
             <div className="qna-banner">
                 <h2>비밀번호 찾기</h2>
             </div>

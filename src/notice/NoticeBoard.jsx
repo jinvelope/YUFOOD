@@ -2,8 +2,7 @@ import React from 'react';
 import useNotices from '../hooks/useNotices';
 import { useNavigate } from 'react-router-dom';
 import '../styles/QnA.css';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar"; // QnA.css 스타일 재사용
+
 
 const NoticeBoard = () => {
     const { notices, isLoading, error } = useNotices();
@@ -18,8 +17,6 @@ const NoticeBoard = () => {
 
     return (
         <div>
-            <Header/>
-            <NavBar/>
             <div className="qna-banner"> {/* QnA.css의 스타일 재사용 */}
                 <h2>공지사항</h2>
                 <div

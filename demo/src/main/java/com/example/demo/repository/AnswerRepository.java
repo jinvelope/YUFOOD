@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long>{
     Page<Answer> findByQuestionId(Question question, Pageable pageable);
-    Page<Answer> findByAuthor(User author, Pageable pageable);
+    Page<Answer> findByUser(User user, Pageable pageable);
     List<Answer> findByQuestionId(Long questionId);
 }

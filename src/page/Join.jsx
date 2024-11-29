@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/Join.css";
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";
+
+
 
 export default function Join() {
     const [email, setEmail] = useState("");
@@ -57,8 +57,6 @@ export default function Join() {
 
     return (
         <div className="page-container">
-            <Header />
-            <NavBar />
             <div className="qna-banner">
                 <h2>회원가입</h2>
             </div>

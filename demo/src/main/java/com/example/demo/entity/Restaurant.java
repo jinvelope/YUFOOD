@@ -34,6 +34,11 @@ public class Restaurant {
 
     private String image1;
     private String image2;
+    
+    private Integer keyword1;
+    private Integer keyword2;
+    private Integer keyword3;
+    private Integer keyword4;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menus;
@@ -173,6 +178,38 @@ public class Restaurant {
 
     public void setImage2(String image2) {
         this.image2 = image2;
+    }
+    
+    public Integer getKeyword1() {
+    	return keyword1;
+    }
+    
+    public void setKeyword1(Integer keyword1) {
+    	this.keyword1 = keyword1;
+    }
+    
+    public Integer getKeyword2() {
+    	return keyword2;
+    }
+    
+    public void setKeyword2(Integer keyword2) {
+    	this.keyword2 = keyword2;
+    }
+    
+    public Integer getKeyword3() {
+    	return keyword3;
+    }
+    
+    public void setKeyword3(Integer keyword3) {
+    	this.keyword3 = keyword3;
+    }
+    
+    public Integer getKeyword4() {
+    	return keyword4;
+    }
+    
+    public void setKeyword4(Integer keyword4) {
+    	this.keyword4 = keyword4;
     }
 
     public List<Menu> getMenus() {

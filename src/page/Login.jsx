@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate 추가
 import '../styles/Join.css';
 import '../styles/QnA.css';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";
+
+
 
 export default function Login({ setIsLoggedIn }) {
     const [email, setEmail] = useState('');
@@ -43,7 +43,7 @@ export default function Login({ setIsLoggedIn }) {
                 email: email,
                 password: pw,
             });
-
+            
             if (response.status === 200) {
                 const { token } = response.data; // JWT 토큰
                 localStorage.setItem('token', token); // 토큰 저장
@@ -60,10 +60,14 @@ export default function Login({ setIsLoggedIn }) {
         }
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            onClickConfirmButton();
+        }
+    };
+
     return (
         <div className="page-container">
-            <Header />
-            <NavBar />
             <div className="qna-banner">
                 <h2>로그인</h2>
             </div>
@@ -93,6 +97,7 @@ export default function Login({ setIsLoggedIn }) {
                                 placeholder="영문, 숫자, 특수문자 포함 8자 이상"
                                 value={pw}
                                 onChange={handlePw}
+                                onKeyDown={handleKeyDown}
                             />
                         </div>
                         {!pwValid && pw.length > 0 && (

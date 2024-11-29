@@ -4,8 +4,8 @@ import './MainPage.css';
 import Logo from '../Image/Logo.png';
 import Search_icon from '../Image/Search_icon.png';
 import { useNavigate } from 'react-router-dom';
-import NavigateWrapper from './NavigateWrapper';
 import { Link } from 'react-router-dom';
+import NavigateWrapper from './NavigateWrapper';
 
 const foodTags = {
     "일식": "restaurantsJapanese",
@@ -30,22 +30,57 @@ class MainPage extends Component {
         // 모달 상태
         isModalOpen: false,
         selectedLocation: "영대 정문", // 기본값 설정
+        loggedIn: false, // 로그인 상태 관리
     };
 
+
     componentDidMount() {
+        const savedLocation = localStorage.getItem('selectedLocation');
+        const selectedLocation = savedLocation || "영대 정문";
+        this.setState({ selectedLocation }, () => {
+            this.fetchRestaurantsByLocation();
+        });
+
         Object.entries(foodTags).forEach(([tag, stateKey]) => {
             const encodedTag = encodeURIComponent(tag);
             axios.get(`http://localhost:8080/api/yufood/category/${encodedTag}`)
                 .then(response => {
-                    console.log(`Response for ${stateKey}:`, response.data); // 응답 데이터 확인
-                    this.setState({ [stateKey]: Array.isArray(response.data) ? response.data : [] });
+                    this.setState({ [stateKey]: response.data });
                 })
                 .catch(error => {
                     console.error(`There was an error fetching data for ${tag}!`, error);
-                    this.setState({ [stateKey]: [] });
                 });
         });
+        const token = localStorage.getItem('token');
+        if (token) {
+            this.setState({ loggedIn: true });
+        }
+
     }
+    handleLocationChange = (location) => {
+        localStorage.setItem('selectedLocation', location);
+        this.setState({ selectedLocation: location }, () => {
+            this.fetchRestaurantsByLocation();
+            this.closeModal();
+        });
+    };
+
+    handleSearch = () => {
+        const searchQuery = document.querySelector('.Header_center_search input').value;
+        if (searchQuery.trim()) {
+            this.props.navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+        }
+    };
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.handleSearch();
+        }
+    };
+
+    handleLogout = () => {
+        localStorage.removeItem('token');
+        this.setState({ loggedIn: false });
+    };
 
     // 페이지 이동 핸들러
     handleNextPage = (stateKey) => {
@@ -81,12 +116,6 @@ class MainPage extends Component {
                 });
         });
     };
-    handleLocationChange = (location) => {
-        this.setState({ selectedLocation: location }, () => {
-            this.fetchRestaurantsByLocation();
-            this.closeModal();
-        });
-    };
     // 모달 열기 및 닫기 핸들러
     openModal = () => {
         this.setState({ isModalOpen: true });
@@ -95,8 +124,10 @@ class MainPage extends Component {
     closeModal = () => {
         this.setState({ isModalOpen: false });
     };
-    handleMoreButtonClick = () => {
-        this.props.navigate('./search');
+    handleMoreButtonClick = (category, location) => {
+        const encodedCategory = encodeURIComponent(category);
+        const encodedLocation = encodeURIComponent(location);
+        window.location.href = `/more?category=${encodedCategory}&location=${encodedLocation}`;
     };
 
     renderCategorySection(categoryName, restaurants, stateKey) {
@@ -117,7 +148,7 @@ class MainPage extends Component {
                 <div className="Section_Wrap">
                     <div className="Section_Title">
                         <h2 className="Title_Name">#{categoryName}</h2>
-                        <button className="More_button" onClick={this.handleMoreButtonClick}>자세히 보기</button>
+                        <button className="More_button" onClick={this.handleMoreButtonClick}>더 보기</button>
                     </div>
                     <span className="Line"></span>
                     <div className="Section_Slide">
@@ -152,29 +183,10 @@ class MainPage extends Component {
     }
 
     render() {
-        const { restaurantsJapanese, restaurantsChinese, restaurantsWestern, restaurantsCafeBakery, isModalOpen } = this.state;
+        const { restaurantsJapanese, restaurantsChinese, restaurantsWestern, restaurantsCafeBakery, isModalOpen, loggedIn } = this.state;
 
         return (
             <div className="Container">
-                <div className="Header">
-                    <img src={Logo} alt="" className="Header_left_logo"/>
-                    <div className="Header_center_search">
-                        <input type="text" placeholder="지역,음식 또는 식당명을 입력해주세요!" />
-                        <button className="search_button">
-                            <img src={Search_icon} alt="search" />
-                        </button>
-                    </div>
-                    <Link to ='/login'><div className="Header_right">로그인</div></Link>
-                    <Link to ='/join'><div className="Header_right">회원가입</div></Link>
-                </div>
-                <nav>
-                    <ul className="nav_ul">
-                        <li><a href="http://localhost:3000/">Home</a></li>
-                        <li><a href="http://localhost:3000/">공지사항</a></li>
-                        <li><a href="http://localhost:3000/">사이트 소개</a></li>
-                        <li><a href="http://localhost:3000/">Q & A</a></li>
-                    </ul>
-                </nav>
                 <div className="Choice_Location">
                     <div className="Location_text">
                         <div className="text1">당신을 위한</div>

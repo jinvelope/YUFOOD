@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import MainPage from './components/MainPage/MainPage.jsx';
-import SearchPage from './components/MainPage/SearchPage.js'; // 새로 만든 페이지
+import MainPage from './components/MainPage/MainPage.jsx'; // 새로 만든 페이지
 import DetailPage from './components/DetailPage/DetailPage.jsx';
 import Login from "./page/Login.jsx";
 import Join from "./page/Join.jsx";
 import QnABoard from "./qna/QnABoard.jsx";
-import PostDetail from "./PostDetail.js";
+import PostDetail from "./qna/QnADetail.jsx";
 import NoticePostDetail from "./notice/NoticePostDetail.jsx"; // 경로 수정
 import Notice from "./Notice.jsx";
 import FindIdPage from "./page/FindIdPage";
 import FindPasswordPage from "./page/FindPasswordPage";
+import Profile from "./page/Profile.jsx";
+import MorePage from "./components/MainPage/MorePage.js"
+import SearchResultsPage from './components/MainPage/SearchResultsPage';
+import Roulette from './components/MainPage/Roulette.js';
+import QnAWrite from './qna/QnAWrite.jsx';
 import ThemeToggle from './components/common/ThemeToggle';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './styles/darkMode.css';
+import { AuthProvider } from './contexts/AuthContext.js';
+import { HeaderProvider } from './components/common/HeaderContext.js';
+import Header from './components/common/Header.js';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
@@ -37,36 +44,41 @@ function App() {
 
     return (
         <ThemeProvider>
-            <Router>
-                <ThemeToggle /> {/* ThemeToggle 컴포넌트 */}
-                <Routes>
-                    <Route path="/" element={<MainPage />} />
-                    <Route path="/search" element={<SearchPage />} />
-                    <Route path="/restaurant/:restaurantId" element={<DetailPage />} />
-                    <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-                    <Route path="/join" element={<Join />} />
-                    <Route path="/QnABoard" element={<QnABoard />} />
-                    <Route path="/QnABoard/:id" element={<PostDetail />} />
-                    <Route path="/Notice" element={<Notice />} />
-                    <Route path="/notice/:id" element={<NoticePostDetail />} />
-                    <Route path="/FindIdPage" element={<FindIdPage />} />
-                    <Route path="/FindPasswordPage" element={<FindPasswordPage />} />
+            <AuthProvider>
+                <Router>
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<MainPage />} />
+                        <Route path="/restaurant/:restaurantId" element={<DetailPage />} />
+                        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+                        <Route path="/join" element={<Join />} />
+                        <Route path="/more" element={<MorePage />} />
+                        <Route path="/search" element={<SearchResultsPage />} />
+                        <Route path="/QnABoard" element={<QnABoard />} />
+                        <Route path="/QnABoard/Write" element={<QnAWrite />} />
+                        <Route path="/QnABoard/:id" element={<PostDetail />} />
+                        <Route path="/Notice" element={<Notice />} />
+                        <Route path="/notice/:id" element={<NoticePostDetail />} />
+                        <Route path="/FindIdPage" element={<FindIdPage />} />
+                        <Route path="/FindPasswordPage" element={<FindPasswordPage />} />
+                        <Route path="/Roulette" element={<Roulette />} />
 
-                    {/* 보호된 경로 */}
-                    <Route
-                        path="/profile"
-                        element={<ProtectedRoute element={<div>프로필 페이지</div>} />}
-                    />
-                    <Route
-                        path="/review"
-                        element={<ProtectedRoute element={<div>리뷰 작성 페이지</div>} />}
-                    />
-                    <Route
-                        path="/qna"
-                        element={<ProtectedRoute element={<div>Q&A 작성 페이지</div>} />}
-                    />
-                </Routes>
-            </Router>
+                        {/* 보호된 경로 */}
+                        <Route
+                            path="/profile"
+                            element={<ProtectedRoute element={<Profile />} />}
+                        />
+                        <Route
+                            path="/review"
+                            element={<ProtectedRoute element={<div>리뷰 작성 페이지</div>} />}
+                        />
+                        <Route
+                            path="/qna"
+                            element={<ProtectedRoute element={<div>Q&A 작성 페이지</div>} />}
+                        />
+                    </Routes>
+                </Router>
+            </AuthProvider>
         </ThemeProvider>
     );
 }

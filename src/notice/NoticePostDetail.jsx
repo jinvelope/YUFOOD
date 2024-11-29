@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";
+
+
 
 const NoticePostDetail = () => {
     const { id } = useParams();
@@ -43,8 +43,6 @@ const NoticePostDetail = () => {
 
     return (
         <div className="page-container">
-            <Header/>
-            <NavBar/>
             <div className="qna-banner">
                 <h2>공지사항</h2>
                 <div className="qna-tag">

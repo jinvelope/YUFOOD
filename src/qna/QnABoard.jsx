@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQnAPosts } from '../hooks/useQnAPosts';
 import '../styles/QnA.css';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";
+
+
 
 const QnABoard = () => {
-    const { posts, isLoading, error } = useQnAPosts();
+    const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/questions'); // 백엔드 API 경로
+                if (!response.ok) {
+                    throw new Error('Failed to fetch posts');
+                }
+                const data = await response.json();
+                setPosts(data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, []);
 
     if (isLoading) return (
         <div className="board-wrapper">
@@ -23,8 +43,6 @@ const QnABoard = () => {
 
     return (
         <div>
-            <Header />
-            <NavBar />
             <div className="qna-banner">
                 <h2>QnA</h2>
                 <div
@@ -56,8 +74,8 @@ const QnABoard = () => {
                             >
                                 <td>{post.id}</td>
                                 <td>{post.title}</td>
-                                <td>{post.author}</td>
-                                <td>{post.date}</td>
+                                <td>{post.user?.username || '알 수 없음'}</td>
+                                <td>{new Date(post.createdAt).toLocaleDateString()}</td>
                                 <td>{post.views}</td>
                             </tr>
                         ))}

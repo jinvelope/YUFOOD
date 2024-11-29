@@ -1,111 +1,124 @@
-/* Header.css */
-.header {
-    background-color: #ffffff;
-    padding: 15px 30px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* 헤더와 네비게이션 전체를 화면 가득 채우도록 수정 */
+.Header {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100vw; /* 너비를 화면 전체로 설정 */
+    margin: 0;
+}
+
+/* 헤더 상단: 로고, 검색창, 로그인/회원가입 버튼 배치 */
+.Header_top {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    height: 8vh; /* 헤더 영역 높이 줄이기 */
+    box-sizing: border-box; /* 패딩 포함 */
 }
 
-.logo-link {
-    text-decoration: none;
+/* 로고 이미지 */
+.Header_logo {
+    height: 50px; /* 로고 크기 조정 */
+}
+
+/* 검색창 */
+.Header_center_search {
     display: flex;
     align-items: center;
-    transition: transform 0.2s ease;
+    background-color: papayawhip;
+    border-radius: 30px;
+    padding: 0 10px;
+    width: 30%; /* 검색창 너비를 2/3로 줄이기 */
+    height: 40px; /* 검색창 높이 조정 */
+    box-sizing: border-box; /* 패딩 포함 */
 }
 
-.logo-link:hover {
-    transform: translateY(-1px);
-}
-
-.logo-icon {
-    width: 100px;  /* 원하는 크기로 조절 */
-    height: 40px;  /* 원하는 크기로 조절 */
-    margin-right: 15px;  /* 로고 텍스트와의 간격 */
-    vertical-align: middle;  /* 텍스트와 수직 정렬 */
-}
-.logo-text {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    letter-spacing: -0.5px;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
-    padding: 10px 40px 10px 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 20px;
-    width: 240px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    background-color: #f8f8f8;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #26baa4;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(38, 186, 164, 0.1);
-}
-
-.search-icon {
-    position: absolute;
-    right: 12px;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.search-icon:hover {
-    color: #26baa4;
-}
-
-.login-button,
-button[aria-label="Toggle theme"] {
-    height: 36px;
-    width: 105px;  /* 정확한 너비 지정 */
-    padding: 0 12px;
-    background-color: #26baa4;
-    color: white;
+.Header_center_search input {
+    flex-grow: 1;
+    background: transparent;
     border: none;
-    border-radius: 8px;
-    font-weight: 500;
+    outline: none;
     font-size: 14px;
-    display: inline-flex;
+    padding-left: 10px;
+}
+
+.Header_center_search button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.Header_center_search button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* 로그인/회원가입 버튼 */
+.Header_right {
+    display: flex;
+    gap: 15px;
+}
+
+.Header_button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+.Header_button:hover {
+    color: mediumseagreen;
+}
+
+/* 네비게이션 바 */
+.Header_nav {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    background-color: black;
+    height: 5vh; /* 네비게이션 높이 설정 */
+    padding: 0 20px; /* 좌우 여백 추가 */
+    width: 100%; /* 화면 가득 채우기 */
+    box-sizing: border-box; /* 패딩 포함 */
+}
+
+.nav_ul {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* 메뉴 간 간격 */
+    padding: 0;
+    margin: 0;
+    align-items: center; /* 텍스트 수직 중앙 정렬 */
+}
+
+.nav_ul li {
+    display: flex;
+    align-items: center; /* 텍스트 수직 중앙 정렬 */
+}
+
+.nav_ul li a {
     text-decoration: none;
-    transition: all 0.2s ease;
-    gap: 4px;  /* 아이콘과 텍스트 사이 간격 */
+    color: white;
+    font-size: 14px; /* 글자 크기 줄이기 */
+    font-weight: normal; /* 글자 굵기 조정 */
+    transition: color 0.2s;
+    padding-left: 10px; /* 각 글자에 약간의 여백 추가 */
 }
 
-/* hover 효과 */
-.login-button:hover,
-button[aria-label="Toggle theme"]:hover {
-    background-color: #229e8a;
-    opacity: 0.9;
+.nav_ul li a:hover {
+    color: mediumseagreen; /* 호버 효과 */
 }
 
-/* 아이콘 크기 조정 */
-button[aria-label="Toggle theme"] svg {
-    width: 16px;
-    height: 16px;
-}
-
-/* 버튼 사이 간격 */
-.login-button {
-    margin-left: 8px;
+/* 페이지 메인 컨텐츠 */
+.Container {
+    width: 100vw; /* 너비를 화면 전체로 설정 */
+    margin: 0 auto;
+    box-sizing: border-box; /* 패딩 포함 */
 }

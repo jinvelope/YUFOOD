@@ -12,50 +12,6 @@ html, body {
     flex-direction: column;
 }
 
-.Header{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    height: 8vh;
-}
-
-.Header img{
-    height: 100%;
-}
-
-.Header_center_search{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 3vh;
-    padding-right: 2vh;
-    width: 50vh;
-    height:70%;
-    background-color: papayawhip;
-    border-radius: 30px;
-}
-
-.Header_center_search input{
-    width:80%;
-    background: transparent;
-    border: none;
-    outline: none;
-}
-
-.search_button{
-    background: none;
-    border: none;
-    cursor: pointer;
-    height: 70%;
-}
-
-.Header_right{
-    padding-right: 5%;
-}
-
 .nav_ul{
     display: flex;
     list-style: none;
@@ -237,7 +193,6 @@ section{
     overflow: hidden;
 }
 
-
 .Restaurant_Card {
     width: 18%;
     border: 1px solid #ddd;
@@ -246,10 +201,12 @@ section{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }
+
 a {
     text-decoration: none;
     color: inherit;
 }
+
 .More_button{
     width: 10%;
     cursor: pointer;
@@ -257,8 +214,6 @@ a {
     border: 0px;
     height: 30px;
 }
-
-
 
 .Restaurant_Card:hover {
     transform: translateY(-4px);
@@ -286,6 +241,7 @@ a {
     font-size: 14px;
     color: #666;
 }
+
 .Section_Button {
     background-color: darkorange;
     border: none;
@@ -306,6 +262,7 @@ a {
 .Section_Button:hover:not(:disabled) {
     background-color: darkturquoise; /* 호버 시 배경색 (비활성화 상태 제외) */
 }
+
 .modal {
     display: flex; /* flex로 설정하여 중앙에 표시 */
     position: fixed;
@@ -317,6 +274,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
 .modal-content {
     background-color: white;
     padding: 20px;
@@ -331,4 +289,5 @@ a {
     border-radius: 30px;
     border: none;
     background-color: #61dafb;
+    cursor: pointer;
 }

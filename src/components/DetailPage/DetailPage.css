@@ -117,6 +117,11 @@
     border-radius: 6%;
 }
 
+.stars{
+    color: #ffd700;
+    font-size: 18px;
+}
+
 .m_button {
     width: 94%;
     border-radius: 10px;
@@ -382,4 +387,89 @@ body.dark-mode {
 
 .dark-mode .delete-review-btn:hover {
     background-color: #990000;
+}
+
+.review-image {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.review-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.dark-mode .review-img {
+    border-color: #444;
+}
+
+  .map-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+  
+  .close-map {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .map-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .map-button:hover {
+    background-color: #45a049;
+  }
+
+  .star-rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 2em;
+    padding: 0 5px;
+    transition: color 200ms ease;
+}
+.form-group textarea {
+    width: 95%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.5;
 }

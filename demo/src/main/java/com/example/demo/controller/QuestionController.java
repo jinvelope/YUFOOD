@@ -31,24 +31,15 @@ public class QuestionController {
     }
 
     // 모든 질문 조회 (QnA 메인페이지)
-//    @GetMapping
-//    public ResponseEntity<?> getAllQuestions() {
-//        List<Question> questions = questionRepository.findAll();
-//        // 질문 목록을 JSON 형태로 반환
-//        List<QuestionResponse> response = questions.stream()
-//                .map(q -> new QuestionResponse(
-//                        q.getId(),
-//                        q.getTitle(),
-//                        q.getAuthor().getUsername(),
-//                        q.getCreatedAt(),
-//                        q.getViews()))
-//                .collect(Collectors.toList());
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping
+    public ResponseEntity<List<Question>> getAllQuestions() {
+        List<Question> questions = questionRepository.findAll();
+        return ResponseEntity.ok(questions); // 데이터베이스에서 가져온 모든 질문 반환
+    }
 
     // 특정 질문 조회
     @GetMapping("/{id}")
-    public ResponseEntity<?> getQuestionById(@PathVariable Long id) {
+    public ResponseEntity<?> getQuestionById(@PathVariable("id") Long id) {
         return questionRepository.findById(id)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("질문을 찾을 수 없습니다."));
@@ -63,8 +54,8 @@ public class QuestionController {
 
         try {
             // 사용자 확인
-            String email = authentication.getName(); // JWT에서 이메일 추출
-            User user = userRepository.findByEmail(email)
+            String name = authentication.getName(); // JWT에서 이메일 추출
+            User user = userRepository.findByUsername(name)
                     .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
             // 질문 생성
@@ -79,11 +70,9 @@ public class QuestionController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body("질문이 성공적으로 등록되었습니다.");
         } catch (Exception e) {
-        	System.out.println("error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("질문 등록 중 오류가 발생했습니다.");
         }
     }
-
 
     // 질문 조회수 증가
     @PutMapping("/{id}/view")

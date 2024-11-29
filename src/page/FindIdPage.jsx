@@ -5,8 +5,8 @@ import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import '../styles/QnA.css';  // QnA 스타일 재사용
 import './FindId.css';
-import Header from "../components/common/Header";
-import NavBar from "../components/common/NavBar";
+
+
 
 const FindIdPage = () => {
     const [name, setName] = useState('');
@@ -29,8 +29,6 @@ const FindIdPage = () => {
 
     return (
         <div>
-            <Header/>
-            <NavBar/>
             <div className="qna-banner">
                 <h2>ID 찾기</h2>
             </div>
